@@ -1,0 +1,38 @@
+data segment
+ string db "NOW IF YOU LOOK AT THAT, OKAY NO$"
+ len db 33
+ vowel db "AEIOUaeiou$"
+ count dw ?
+data ends
+code segment
+assume ds: data, cs: code
+start: mov ax, data;
+ mov ds, ax;
+ mov count, 00h; Set count to zero
+ mov cl, len; Put length in cl
+ dec cl; Acutal length = length - 1
+ lea si, string; Load string address
+ oloop:
+
+ lea di, vowel; Load vowel address
+ mov dl, 0Ah; Put number of vowels to check in dl
+ iloop:
+ mov al, [si]; Move stuff to compare in
+ mov bl, [di]; al and bl, increment count if equal
+ cmp al, bl;
+ jne endil;
+ add count, 01h;
+ endil:
+ inc di;
+ dec dl;
+ jnz iloop;
+ inc si;
+ dec cl;
+ jnz oloop;
+  mov dx, count
+  add dx,00h
+ int 21h
+ mov ah, 4ch
+ int 21h
+ code ends
+end start
